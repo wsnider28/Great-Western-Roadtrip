@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Road Trip">
+<meta name="theme-color" content="#1a4a6b">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>Pacific Coast Road Trip</title>
+<style>
+:root{--ocean:#1a4a6b;--forest:#2d5a3d;--rust:#c0622a;--cream:#faf7f2;--ink:#1c1c1c;--mist:#8fa8b8;--mtg:#8b1a1a;--card:#fff;--border:#e8e4dc;}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--cream);color:var(--ink);font-size:15px;line-height:1.5;}
+.hdr{background:var(--ocean);color:white;padding:52px 16px 12px;position:sticky;top:0;z-index:100;}
+.hdr h1{font-size:17px;font-weight:700;margin-bottom:2px;}
+.hdr .sub{font-size:11px;color:#9ec4dd;letter-spacing:.04em;}
+.leg{display:flex;gap:10px;margin-top:7px;flex-wrap:wrap;}
+.li{display:flex;align-items:center;gap:4px;font-size:11px;color:#b8d4e8;}
+.ld{width:8px;height:8px;border-radius:50%;}
+.hint{color:#6a9ab8;font-size:11px;margin-top:4px;}
+.wrap{padding:10px 10px 60px;max-width:600px;margin:0 auto;}
+.day{margin-bottom:8px;border-radius:12px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.1);}
+.dh{display:flex;align-items:stretch;cursor:pointer;}
+.dd{background:var(--ocean);color:white;padding:10px 12px;min-width:78px;display:flex;flex-direction:column;justify-content:center;flex-shrink:0;}
+.dd.L{background:var(--forest);}
+.dl{font-size:9px;text-transform:uppercase;letter-spacing:.1em;opacity:.7;font-weight:600;}
+.dn{font-size:18px;font-weight:700;line-height:1;margin:1px 0;}
+.dw{font-size:9px;opacity:.75;text-transform:uppercase;letter-spacing:.06em;}
+.dt{background:var(--card);flex:1;padding:9px 8px 9px 11px;display:flex;align-items:center;gap:6px;min-width:0;border-bottom:1px solid var(--border);}
+.dti{flex:1;min-width:0;}
+.dtx{font-size:13px;font-weight:700;color:var(--ink);line-height:1.3;}
+.tags{display:flex;gap:3px;margin-top:3px;flex-wrap:wrap;}
+.tag{font-size:10px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:2px 6px;border-radius:10px;white-space:nowrap;}
+.td{background:#ddeef7;color:#1a4a6b;}
+.tl{background:#d4e8d9;color:#2d5a3d;}
+.tm{background:#fde8e8;color:#8b1a1a;}
+.ts{background:#fef3e2;color:#8a5500;}
+.tc2{background:#f0ecf7;color:#4a2d7a;}
+.to{background:#f0f0f0;color:#666;}
+.cv{font-size:14px;color:var(--mist);flex-shrink:0;transition:transform .2s;}
+.day.open .cv{transform:rotate(180deg);}
+.db{display:none;background:var(--card);}
+.day.open .db{display:block;}
+.tbl{width:100%;border-collapse:collapse;}
+.tbl tr{border-bottom:1px solid #f2f2f0;}
+.tbl tr:last-child{border-bottom:none;}
+.tbl tr:active{background:#f8f8f6;}
+.ti2{padding:8px 6px 8px 11px;font-size:11px;font-weight:600;color:var(--mist);white-space:nowrap;vertical-align:top;width:70px;}
+.ti3{padding:8px 4px;font-size:14px;vertical-align:top;width:24px;}
+.td2{padding:8px 11px 8px 0;font-size:13px;color:#333;vertical-align:top;line-height:1.45;}
+.td2 a{color:var(--ocean);text-decoration:none;font-weight:600;border-bottom:1px dotted #9ec4dd;}
+.td2 a:active{color:var(--rust);}
+.mr{background:#fff8f8!important;}
+.mr .td2{color:var(--mtg);font-weight:600;}
+.mr .ti2{color:#c07070;}
+.or{background:#fafafa!important;}
+.or .td2{color:#777;font-style:italic;}
+.nr td{padding:4px 11px 8px 89px;font-size:12px;color:#999;font-style:italic;line-height:1.4;background:#fdfcfa;border-top:1px dashed #ececec!important;}
+.mpr{padding:8px 11px 10px;background:#f5f9fd;border-top:1px solid #e4eef7;display:flex;flex-wrap:wrap;gap:6px;}
+.mb{display:inline-block;padding:8px 12px;background:var(--ocean);color:white!important;border-radius:8px;font-size:12px;font-weight:600;letter-spacing:.03em;text-decoration:none!important;-webkit-touch-callout:none;}
+.mb.s{background:#4a7a9b;}
+</style>
+</head>
+<body>
+<div class="hdr">
+  <h1>🚐 Pacific Coast Road Trip — July 6–18</h1>
+  <div class="sub">Mapleton UT · Tahoe · Redwoods · Oregon · Olympic · Gorge · Boise</div>
+  <div class="leg">
+    <div class="li"><div class="ld" style="background:#6a9ab8"></div>Drive</div>
+    <div class="li"><div class="ld" style="background:#7ab88a"></div>Leisure</div>
+    <div class="li"><div class="ld" style="background:#e8a0a0"></div>⚠️ Meeting</div>
+    <div class="li"><div class="ld" style="background:#f5c97a"></div>Sight</div>
+    <div class="li"><div class="ld" style="background:#c8c8c8"></div>Optional</div>
+  </div>
+  <div class="hint">▼ Tap any day to expand</div>
+</div>
+<div class="wrap">
+
+<!-- DAY 1 -->
+<div class="day open" id="d0">
+<div class="dh" onclick="tog('d0')">
+<div class="dd"><div class="dl">Day 1</div><div class="dn">Jul 6</div><div class="dw">Monday</div></div>
+<div class="dt"><div class="dti"><div class="dtx">Mapleton, UT → Virginia City, NV → Camp Richardson, South Lake Tahoe, CA</div><div class="tags"><span class="tag td">Drive</span><span class="tag tm">⚠️ Meeting</span><span class="tag ts">Sightseeing</span><span class="tag tc2">Overnight</span></div></div><div class="cv">▼</div></div>
+</div>
+<div class="db">
+<table class="tbl">
+<tr><td class="ti2">6:00 AM</td><td class="ti3">🚐</td><td class="td2">Depart Mapleton. Fuel up. Head west on US-6, then I-80 West through Salt Lake City — early start beats northbound commuter traffic.</td></tr>
+<tr><td class="ti2">7:30 AM</td><td class="ti3">🌆</td><td class="td2">Through Salt Lake City.</td></tr>
+<tr><td class="ti2">~8:00 AM</td><td class="ti3">⏰</td><td class="td2"><strong>Cross into Pacific Time at Wendover, NV.</strong> Clocks go back 1 hour. Your 4pm meeting is at 5pm Mountain — on Pacific Time for the rest of the trip.</td></tr>
+<tr><td class="ti2">11:30 AM</td><td class="ti3">⛽</td><td class="td2">Elko or Battle Mountain — fuel, quick stretch.</td></tr>
+<tr><td class="ti2">1:30 PM</td><td class="ti3">🏙️</td><td class="td2">Reno — fuel. Take I-580 South toward Carson City.</td></tr>
+<tr><td class="ti2">2:15 PM</td><td class="ti3">🏛️</td><td class="td2">Carson City — US-50 East briefly, then Hwy 341 North (truck route). 🚨 Do NOT use Geiger Grade from the north with trailers.</td></tr>
+<tr><td class="ti2">2:45 PM</td><td class="ti3">🤠</td><td class="td2"><a href="https://www.google.com/maps/search/?api=1&query=Virginia+City%2C+NV+89440">📍 Virginia City</a> — C Street parking. Boardwalk, saloons, Comstock mining history, Piper's Opera House. ~1 hr.</td></tr>
+<tr class="mr"><td class="ti2">4:00 PM</td><td class="ti3">💻</td><td class="td2">🔴 Monday meeting (4:00–5:05 PM Pacific) — parked in Virginia City! Do from motorhome or a bench on the boardwalk.</td></tr>
+<tr><td class="ti2">5:15 PM</td><td class="ti3">🚐</td><td class="td2">Depart Virginia City. Hwy 341 south to US-50 West into the Sierra Nevada.</td></tr>
+<tr><td class="ti2">6:30 PM</td><td class="ti3">🌲</td><td class="td2"><a href="https://www.google.com/maps/search/?api=1&query=Camp+Richardson+Resort%2C+1900+Jameson+Beach+Rd%2C+South+Lake+Tahoe%2C+CA+96150">📍 Arrive Camp Richardson</a> — set up, dinner. 2-night stay.</td></tr>
+<tr class="nr"><td colspan="3">2-night stay. Check-in after 2pm. Spectacular Sierra pines right at the lake.</td></tr>
+</table>
+<div class="mpr">
+<a class="mb" href="https://www.google.com/maps/dir/Mapleton%2C+UT/Virginia+City%2C+NV/Camp+Richardson+Resort%2C+South+Lake+Tahoe%2C+CA">🗺️ Full Day Route</a>
+</div>
+</div>
+</div>
+
+<!-- DAY 2 -->
+<div class="day" id="d1">
+<div class="dh" onclick="tog('d1')">
+<div class="dd L"><div class="dl">Day 2</div><div class="dn">Jul 7</div><div class="dw">Tuesday</div></div>
+<div class="dt"><div class="dti"><div class="dtx">Full Day — Lake Tahoe, CA</div><div class="tags"><span class="tag tl">Leisure</span><span class="tag tm">⚠️ Meeting</span><span class="tag ts">Sightseeing</span></div></div><div class="cv">▼</div></div>
+</div>
+<div class="db">
+<table class="tbl">
+<tr><td class="ti2">8:00 AM</td><td class="ti3">☕</td><td class="td2">Breakfast at camp.</td></tr>
+<tr><td class="ti2">9:00 AM</td><td class="ti3">🏔️</td><td class="td2"><a href="https://www.google.com/maps/search/?api=1&query=Emerald+Bay+State+Park%2C+CA">📍 Emerald Bay State Park</a> — Vikingsholm overlook. One of the most photographed views in North America. Trailers stay at camp; tow vehicles only.</td></tr>
+<tr><td class="ti2">10:30 AM</td><td class="ti3">🥾</td><td class="td2">Optional: hike down to Vikingsholm Castle (1 mi each way, steep).</td></tr>
+<tr><td class="ti2">12:00 PM</td><td class="ti3">🍽️</td><td class="td2">Lakefront lunch in South Lake Tahoe.</td></tr>
+<tr><td class="ti2">1:30 PM</td><td class="ti3">🏖️</td><td class="td2"><a href="https://www.google.com/maps/search/?api=1&query=Pope+Beach%2C+South+Lake+Tahoe%2C+CA">📍 Pope Beach or Kiva Beach</a> — family swim on the lake.</td></tr>
+<tr><td class="ti2">3:30 PM</td><td class="ti3">📡</td><td class="td2">Back at camp. Set up Starlink.</td></tr>
+<tr class="mr"><td class="ti2">4:00 PM</td><td class="ti3">💻</td><td class="td2">🔴 Tuesday meeting (4:00–5:45 PM Pacific) — at camp.</td></tr>
+<tr><td class="ti2">6:00 PM</td><td class="ti3">🍽️</td><td class="td2">Dinner at camp or nearby.</td></tr>
+<tr><td class="ti2">7:30 PM</td><td class="ti3">🌅</td><td class="td2">Evening walk through the pines.</td></tr>
+</table>
+<div class="mpr">
+<a class="mb" href="https://www.google.com/maps/search/?api=1&query=Emerald+Bay+State+Park%2C+CA">🗺️ Emerald Bay</a>
+<a class="mb s" href="https://www.google.com/maps/search/?api=1&query=Pope+Beach%2C+South+Lake+Tahoe%2C+CA">🗺️ Pope Beach</a>
+</div>
+</div>
+</div>
+
+<!-- DAY 3 -->
+<div class="day" id="d2">
+<div class="dh" onclick="tog('d2')">
+<div class="dd"><div class="dl">Day 3</div><div class="dn">Jul 8</div><div class="dw">Wednesday</div></div>
+<div class="dt"><div class="dti"><div class="dtx">Camp Richardson → Mad River Rapids, Arcata, CA</div><div class="tags"><span class="tag td">Drive</span><span class="tag tc2">Overnight</span><span class="tag to">Optional</span></div></div><div class="cv">▼</div></div>
+</div>
+<div class="db">
+<table class="tbl">
+<tr><td class="ti2">7:30 AM</td><td class="ti3">🚐</td><td class="td2">Break camp, hook up. No meeting today — most relaxed long drive of the trip.</td></tr>
+<tr class="or"><td class="ti2"></td><td class="ti3">🔀</td><td class="td2"><strong>Route choice — pick on the morning:</strong></td></tr>
+<tr class="or"><td class="ti2">FAST</td><td class="ti3">🛣️</td><td class="td2">US-50 W → Sacramento → CA-299 W. Trinity Alps canyon drive. Arrive ~2:30pm. (~7.5 hrs convoy)</td></tr>
+<tr class="or"><td class="ti2">SCENIC</td><td class="ti3">🌄</td><td class="td2">US-50 W → Truckee → Nevada City &amp; Grass Valley → Chico → CA-36 W → Arcata. Gold Country foothills. Arrive ~4:30pm. (~9.5 hrs) — depart by 7am if choosing this.</td></tr>
+<tr><td class="ti2">2:30 PM</td><td class="ti3">🏕️</td><td class="td2"><a href="https://www.google.com/maps/search/?api=1&query=Mad+River+Rapids+RV+Park%2C+3501+Janes+Rd%2C+Arcata%2C+CA+95521">📍 Mad River Rapids RV Park, Arcata</a> — set up. (Fast route arrival time)</td></tr>
+<tr><td class="ti2">4:00 PM</td><td class="ti3">🏖️</td><td class="td2"><a href="https://www.google.com/maps/search/?api=1&query=Mad+River+Beach+County+Park%2C+Arcata%2C+CA">📍 Mad River Beach</a> — 10 min west. No meeting today — enjoy it.</td></tr>
+<tr><td class="ti2">7:30 PM</td><td class="ti3">🍽️</td><td class="td2">Dinner in Arcata — excellent college-town food scene.</td></tr>
+<tr class="nr"><td colspan="3">1-night stay. Check-in after 1pm. If taking the scenic route, depart by 7:00am.</td></tr>
+</table>
+<div class="mpr">
+<a class="mb" href="https://www.google.com/maps/dir/Camp+Richardson+Resort%2C+South+Lake+Tahoe%2C+CA/Sacramento%2C+CA/Mad+River+Rapids+RV+Park%2C+Arcata%2C+CA">🗺️ Fast Route</a>
+<a class="mb s" href="https://www.google.com/maps/dir/Camp+Richardson+Resort%2C+South+Lake+Tahoe%2C+CA/Truckee%2C+CA/Nevada+City%2C+CA/Chico%2C+CA/Mad+River+Rapids+RV+Park%2C+Arcata%2C+CA">🗺️ Scenic Route</a>
+</div>
+</div>
+</div>
+
+<!-- DAY 4 -->
+<div class="day" id="d3">
+<div class="dh" onclick="tog('d3')">
+<div class="dd"><div class="dl">Day 4</div><div class="dn">Jul 9</div><div class="dw">Thursday</div></div>
+<div class="dt"><div class="dti"><div class="dtx">Arcata → Trees of Mystery → Redwood Meadows, Hiouchi, CA</div><div class="tags"><span class="tag td">Drive</span><span class="tag tm">⚠️ Meeting</span><span class="tag ts">Sightseeing</span><span class="tag tc2">Overnight</span></div></div><div class="cv">▼</div></div>
+</div>
+<div class="db">
+<table class="tbl">
+<tr><td class="ti2">8:30 AM</td><td class="ti3">☕</td><td class="td2">Leisurely breakfast — very short travel day.</td></tr>
+<tr><td class="ti2">9:30 AM</td><td class="ti3">🚐</td><td class="td2">Depart Arcata north on US-101.</td></tr>
+<tr><td class="ti2">10:15 AM</td><td class="ti3">🌲</td><td class="td2"><a href="https://www.google.com/maps/search/?api=1&query=Trees+of+Mystery%2C+15500+US-101%2C+Klamath%2C+CA+95548">📍 Trees of Mystery, Klamath</a> (~35 mi north). Large lot — trailers fine. Gondola, SkyTrail bridges, Paul Bunyan, Native American museum. ~1.5 hrs.</td></tr>
+<tr><td class="ti2">12:00 PM</td><td class="ti3">🍽️</td><td class="td2">Lunch at Trees of Mystery café or Klamath.</td></tr>
+<tr><td class="ti2">1:15 PM</td><td class="ti3">🏕️</td><td class="td2"><a href="https://www.google.com/maps/search/?api=1&query=Redwood+Meadows+RV+Resort%2C+2000+US-199%2C+Crescent+City%2C+CA+95531">📍 Arrive Redwood Meadows, Hiouchi</a> — set up. Directly across from Jedediah Smith State Park.</td></tr>
+<tr><td class="ti2">2:30 PM</td><td class="ti3">🌳</td><td class="td2"><a href="https://www.google.com/maps/search/?api=1&query=Stout+Grove%2C+Jedediah+Smith+Redwoods+State+Park%2C+CA">📍 Stout Grove</a> — unhook trailers at camp. Tow vehicles only on Howland Hill Rd. 🚨 One-lane dirt road — NO trailers. Easy 1-mi loop.</td></tr>
+<tr><td class="ti2">3:30 PM</td><td class="ti3">📡</td><td class="td2">Back at camp. Starlink up.</td></tr>
+<tr class="mr"><td class="ti2">4:00 PM</td><td class="ti3">💻</td><td class="td2">🔴 Thursday meeting (4:00–5:05 PM Pacific) — at camp.</td></tr>
+<tr><td class="ti2">5:15 PM</td><td class="ti3">🔥</td><td class="td2">Dinner, campfire, evening surrounded by the world's tallest trees.</td></tr>
+<tr class="nr"><td colspan="3">1-night stay. Check-in after 1pm. Secure Grove of Titans permit at recreation.gov in advance.</td></tr>
+</table>
+<div class="mpr">
+<a class="mb" href="https://www.google.com/maps/dir/Mad+River+Rapids+RV+Park%2C+Arcata%2C+CA/Trees+of+Mystery%2C+Klamath%2C+CA/Redwood+Meadows+RV+Resort%2C+Hiouchi%2C+CA">🗺️ Full Day Route</a>
+<a class="mb s" href="https://www.google.com/maps/search/?api=1&query=Stout+Grove%2C+Jedediah+Smith+Redwoods+State+Park%2C+CA">🗺️ Stout Grove</a>
+</div>
+</div>
+</div>
+
+<!-- DAY 5 -->
+<div class="day" id="d4">
+<div class="dh" onclick="tog('d4')">
+<div class="dd"><div class="dl">Day 5</div><div class="dn">Jul 10</div><div class="dw">Friday</div></div>
+<div class="dt"><div class="dti"><div class="dtx">Hiouchi → Boardman Corridor → Netarts Bay, Tillamook, OR</div><div class="tags"><span class="tag td">Drive</span><span class="tag ts">Sightseeing</span><span class="tag tc2">Overnight</span></div></div><div class="cv">▼</div></div>
+</div>
+<div class="db">
+<table class="tbl">
+<tr><td class="ti2">9:00 AM</td><td class="ti3">🚐</td><td class="td2">Depart Hiouchi north on US-199 to US-101. Cross into Oregon near Brookings.</td></tr>
+<tr><td class="ti2">10:30 AM</td><td class="ti3">🌊</td><td class="td2"><a href="https://www.google.com/maps/search/?api=1&query=Samuel+H.+Boardman+State+Scenic+Corridor%2C+US+101%2C+Brookings%2C+OR">📍 Samuel H. Boardman Scenic Corridor</a> — 2–3 pullout stops: Arch Rock, Natural Bridges, Whaleshead Beach. Trailers fine at pullouts. ~20–30 min. Massively underrated.</td></tr>
+<tr><td class="ti2">11:30 AM</td><td class="ti3">⛽</td><td class="td2">Bandon — fuel and stretch.</td></tr>
+<tr><td class="ti2">12:30 PM</td><td class="ti3">🍔</td><td class="td2">Lunch near Coos Bay or Florence.</td></tr>
+<tr><td class="ti2">2:45 PM</td><td class="ti3">🏕️</td><td class="td2"><a href="https://www.google.com/maps/search/?api=1&query=Netarts+Bay+Garden+RV+Resorts%2C+2260+Bilyeu+Ave+W%2C+Tillamook%2C+OR+97141">📍 Arrive Netarts Bay Garden RV Resort</a> — set up. Bay views, crabbing, fresh-baked pastries in the morning.</td></tr>
+<tr><td class="ti2">4:00 PM</td><td class="ti3">🦀</td><td class="td2">Explore the bay. Try crabbing if the park has rings to loan.</td></tr>
+<tr><td class="ti2">6:00 PM</td><td class="ti3">🍽️</td><td class="td2">Drive ~7 miles east into Tillamook for dinner.</td></tr>
+<tr class="nr"><td colspan="3">1-night stay. Check-in after 2pm. No meeting today.</td></tr>
+</table>
+<div class="mpr">
+<a class="mb" href="https://www.google.com/maps/dir/Redwood+Meadows+RV+Resort%2C+Hiouchi%2C+CA/Samuel+H.+Boardman+State+Scenic+Corridor%2C+Brookings%2C+OR/Netarts+Bay+Garden+RV+Resorts%2C+Tillamook%2C+OR">🗺️ Full Day Route</a>
+</div>
+</div>
+</div>
+
+<!-- DAY 6 -->
+<div class="day" id="d5">
+<div class="dh" onclick="tog('d5')">
+<div class="dd"><div class="dl">Day 6</div><div class="dn">Jul 11</div><div class="dw">Saturday</div></div>
+<div class="dt"><div class="dti"><div class="dtx">Tillamook Creamery → Cannon Beach → Sunrise Pacific Holiday, Long Beach, WA</div><div class="tags"><span class="tag td">Drive</span><span class="tag ts">Sightseeing</span><span class="tag tc2">Overnight</span></div></div><div class="cv">▼</div></div>
+</div>
+<div class="db">
+<table class="tbl">
+<tr><td class="ti2">8:30 AM</td><td class="ti3">🚐</td><td class="td2">Break camp, hook up trailers. Drive 7 miles east into Tillamook with rigs.</td></tr>
+<tr><td class="ti2">10:00 AM</td><td class="ti3">🧀</td><td class="td2"><a href="https://www.google.com/maps/search/?api=1&query=Tillamook+Creamery%2C+4165+N+Hwy+101%2C+Tillamook%2C+OR+97141">📍 Tillamook Creamery</a> — opens at 10am. Large east-side lot handles big rigs with trailers. Factory tour, cheese, ice cream. ~1–1.5 hrs.</td></tr>
+<tr><td class="ti2">11:30 AM</td><td class="ti3">🚐</td><td class="td2">Depart Tillamook north on US-101.</td></tr>
+<tr><td class="ti2">12:15 PM</td><td class="ti3">🗿</td><td class="td2"><a href="https://www.google.com/maps/search/?api=1&query=Tolovana+Wayside%2C+Cannon+Beach%2C+OR+97110">📍 Cannon Beach — Tolovana Wayside</a> (south end of town). Best large-rig parking for 3 rigs — easy Hwy 101 access, spacious, trailers fine. Mo's seafood is right here. Walk north along beach to Haystack Rock (~10 min). ~1 hr total.</td></tr>
+<tr><td class="ti2">1:30 PM</td><td class="ti3">🍽️</td><td class="td2">Lunch at Mo's at Tolovana or in Cannon Beach village.</td></tr>
+<tr><td class="ti2">2:00 PM</td><td class="ti3">🚐</td><td class="td2">Continue north on US-101 through Seaside, Astoria.</td></tr>
+<tr class="or"><td class="ti2">2:45 PM</td><td class="ti3">🗼</td><td class="td2"><a href="https://www.google.com/maps/search/?api=1&query=Astoria+Column%2C+1+Coxcomb+Dr%2C+Astoria%2C+OR+97103">📍 Astoria Column</a> — optional 20-min stop, panoramic views of Columbia River mouth.</td></tr>
+<tr><td class="ti2">3:15 PM</td><td class="ti3">🌉</td><td class="td2">Cross the Astoria-Megler Bridge into Washington.</td></tr>
+<tr><td class="ti2">3:45 PM</td><td class="ti3">🏕️</td><td class="td2"><a href="https://www.google.com/maps/search/?api=1&query=Sunrise+Pacific+Holiday%2C+12109+Pacific+Way%2C+Long+Beach%2C+WA+98631">📍 Arrive Sunrise Pacific Holiday, Long Beach</a> — set up. 3-night stay.</td></tr>
+<tr class="nr"><td colspan="3">3-night stay. Check-in after 1pm. 🚨 Dump tanks here before Jul 14 — Hard Rain Café has no sewer.</td></tr>
+</table>
+<div class="mpr">
+<a class="mb" href="https://www.google.com/maps/dir/Netarts+Bay+Garden+RV+Resorts%2C+Tillamook%2C+OR/Tillamook+Creamery%2C+Tillamook%2C+OR/Tolovana+Wayside%2C+Cannon+Beach%2C+OR/Sunrise+Pacific+Holiday%2C+Long+Beach%2C+WA">🗺️ Full Day Route</a>
+</div>
+</div>
+</div>
+
+<!-- DAY 7 -->
+<div class="day" id="d6">
+<div class="dh" onclick="tog('d6')">
+<div class="dd L"><div class="dl">Day 7</div><div class="dn">Jul 12</div><div class="dw">Sunday</div></div>
+<div class="dt"><div class="dti"><div class="dtx">Full Day — Long Beach, WA</div><div class="tags"><span class="tag tl">Leisure</span><span class="tag ts">Sightseeing</span></div></div><div class="cv">▼</div></div>
+</div>
+<div class="db">
+<table class="tbl">
+<tr><td class="ti2">8:30 AM</td><td class="ti3">☕</td><td class="td2">Breakfast.</td></tr>
+<tr><td class="ti2">9:30 AM</td><td class="ti3">🏰</td><td class="td2"><a href="https://www.google.com/maps/search/?api=1&query=Cape+Disappointment+State+Park%2C+244+Robert+Gray+Dr%2C+Ilwaco%2C+WA+98624">📍 Cape Disappointment State Park</a> — Lewis &amp; Clark Center, North Head Lighthouse, Dead Man's Cove. ~25 min south. Tow vehicles from camp. 2–3 hrs.</td></tr>
+<tr><td class="ti2">12:30 PM</td><td class="ti3">🍔</td><td class="td2">Back to Long Beach for lunch.</td></tr>
+<tr><td class="ti2">2:00 PM</td><td class="ti3">🚗</td><td class="td2">World's Longest Beach drive — Long Beach permits vehicles on the sand.</td></tr>
+<tr><td class="ti2">3:30 PM</td><td class="ti3">🪁</td><td class="td2">Kite flying on the main strip.</td></tr>
+<tr><td class="ti2">5:30 PM</td><td class="ti3">🍽️</td><td class="td2">Dinner in town.</td></tr>
+<tr><td class="ti2">7:30 PM</td><td class="ti3">🔥</td><td class="td2">Bonfire or evening stroll on the beach.</td></tr>
+</table>
+<div class="mpr">
+<a class="mb" href="https://www.google.com/maps/search/?api=1&query=Cape+Disappointment+State+Park%2C+244+Robert+Gray+Dr%2C+Ilwaco%2C+WA+98624">🗺️ Cape Disappointment</a>
+<a class="mb s" href="https://www.google.com/maps/search/?api=1&query=Long+Beach%2C+WA+98631">🗺️ Long Beach WA</a>
+</div>
+</div>
+</div>
+
+<!-- DAY 8 -->
+<div class="day" id="d7">
+<div class="dh" onclick="tog('d7')">
+<div class="dd L"><div class="dl">Day 8</div><div class="dn">Jul 13</div><div class="dw">Monday</div></div>
+<div class="dt"><div class="dti"><div class="dtx">Second Full Day — Long Beach, WA</div><div class="tags"><span class="tag tl">Leisure</span><span class="tag tm">⚠️ Meeting</span></div></div><div class="cv">▼</div></div>
+</div>
+<div class="db">
+<table class="tbl">
+<tr><td class="ti2">9:00 AM</td><td class="ti3">☕</td><td class="td2">Relaxed morning.</td></tr>
+<tr><td class="ti2">10:00 AM</td><td class="ti3">🐦</td><td class="td2"><a href="https://www.google.com/maps/search/?api=1&query=Leadbetter+Point+State+Park%2C+Oysterville%2C+WA+98641">📍 Leadbetter Point State Park</a> — northern tip of the peninsula, wildlife refuge, dunes, shorebirds. ~30 min north. Tow vehicles.</td></tr>
+<tr><td class="ti2">12:00 PM</td><td class="ti3">🍽️</td><td class="td2">Lunch at camp or Ilwaco.</td></tr>
+<tr><td class="ti2">1:30 PM</td><td class="ti3">🦪</td><td class="td2"><a href="https://www.google.com/maps/search/?api=1&query=Bay+Center%2C+WA+98527">📍 Willapa Bay</a> — drive to Bay Center for fresh oysters if the group is game.</td></tr>
+<tr><td class="ti2">3:30 PM</td><td class="ti3">📦</td><td class="td2">Back at camp. Starlink up. Begin packing. <strong>Dump tanks today!</strong></td></tr>
+<tr class="mr"><td class="ti2">4:00 PM</td><td class="ti3">💻</td><td class="td2">🔴 Monday meeting (4:00–5:05 PM Pacific) — at camp.</td></tr>
+<tr><td class="ti2">5:15 PM</td><td class="ti3">🍽️</td><td class="td2">Final Long Beach dinner.</td></tr>
+</table>
+<div class="mpr">
+<a class="mb" href="https://www.google.com/maps/search/?api=1&query=Leadbetter+Point+State+Park%2C+Oysterville%2C+WA+98641">🗺️ Leadbetter Point</a>
+<a class="mb s" href="https://www.google.com/maps/search/?api=1&query=Bay+Center%2C+WA+98527">🗺️ Bay Center / Willapa Bay</a>
+</div>
+</div>
+</div>
+
+<!-- DAY 9 -->
+<div class="day" id="d8">
+<div class="dh" onclick="tog('d8')">
+<div class="dd"><div class="dl">Day 9</div><div class="dn">Jul 14</div><div class="dw">Tuesday</div></div>
+<div class="dt"><div class="dti"><div class="dtx">Long Beach → Kalaloch / Tree of Life → Ruby Beach → Hard Rain Café, Hoh</div><div class="tags"><span class="tag td">Drive</span><span class="tag tm">⚠️ Meeting</span><span class="tag ts">Sightseeing</span><span class="tag tc2">Overnight</span></div></div><div class="cv">▼</div></div>
+</div>
+<div class="db">
+<table class="tbl">
+<tr><td class="ti2">9:00 AM</td><td class="ti3">🚐</td><td class="td2">Depart Long Beach north on US-101.</td></tr>
+<tr><td class="ti2">10:30 AM</td><td class="ti3">🌳</td><td class="td2"><a href="https://www.google.com/maps/search/?api=1&query=Kalaloch+Campground%2C+Olympic+National+Park%2C+WA+98331">📍 Kalaloch — Tree of Life</a>. Park in the campground day-use area (free, no park pass needed). Short trail to beach, walk north a few minutes. ⚠️ Erosion has accelerated — admire from a distance, don't climb. ~30–40 min.</td></tr>
+<tr><td class="ti2">11:15 AM</td><td class="ti3">🌊</td><td class="td2"><a href="https://www.google.com/maps/search/?api=1&query=Ruby+Beach%2C+Olympic+National+Park%2C+WA+98331">📍 Ruby Beach</a> (~12 min north). Large pullout lot — trailers fine. Dramatic sea stacks, massive driftwood. ~45–60 min.</td></tr>
+<tr><td class="ti2">12:15 PM</td><td class="ti3">🍔</td><td class="td2">Picnic at Ruby Beach or continue to Forks for lunch.</td></tr>
+<tr><td class="ti2">1:00 PM</td><td class="ti3">⛽</td><td class="td2"><a href="https://www.google.com/maps/search/?api=1&query=Forks%2C+WA+98331">📍 Forks</a> — fuel up, lunch. Last real services before Hard Rain Café.</td></tr>
+<tr><td class="ti2">2:00 PM</td><td class="ti3">🏕️</td><td class="td2"><a href="https://www.google.com/maps/search/?api=1&query=Hard+Rain+Cafe%2C+5763+Upper+Hoh+Rd%2C+Forks%2C+WA+98331">📍 Arrive Hard Rain Café RV Park</a> — set up. Check-in after 1pm.</td></tr>
+<tr><td class="ti2">2:45 PM</td><td class="ti3">🌲</td><td class="td2">Short walk on the Hoh River Trail from camp.</td></tr>
+<tr><td class="ti2">3:30 PM</td><td class="ti3">📡</td><td class="td2">Back at camp. Starlink up.</td></tr>
+<tr class="mr"><td class="ti2">4:00 PM</td><td class="ti3">💻</td><td class="td2">🔴 Tuesday meeting (4:00–5:45 PM Pacific) — at camp.</td></tr>
+<tr><td class="ti2">6:00 PM</td><td class="ti3">🍔</td><td class="td2">Dinner at the Hard Rain Café — the Bigfoot Burger is legendary.</td></tr>
+<tr class="nr"><td colspan="3">2-night stay. Water &amp; 30-amp electric only — NO sewer. Tanks should be dumped from Long Beach.</td></tr>
+</table>
+<div class="mpr">
+<a class="mb" href="https://www.google.com/maps/dir/Sunrise+Pacific+Holiday%2C+Long+Beach%2C+WA/Kalaloch+Campground%2C+Olympic+National+Park%2C+WA/Ruby+Beach%2C+Olympic+National+Park%2C+WA/Hard+Rain+Cafe%2C+Forks%2C+WA">🗺️ Full Day Route</a>
+</div>
+</div>
+</div>
+
+<!-- DAY 10 -->
+<div class="day" id="d9">
+<div class="dh" onclick="tog('d9')">
+<div class="dd L"><div class="dl">Day 10</div><div class="dn">Jul 15</div><div class="dw">Wednesday</div></div>
+<div class="dt"><div class="dti"><div class="dtx">Full Day — Hoh Rain Forest, Olympic National Park</div><div class="tags"><span class="tag tl">Leisure</span><span class="tag ts">Sightseeing</span></div></div><div class="cv">▼</div></div>
+</div>
+<div class="db">
+<table class="tbl">
+<tr><td class="ti2">7:30 AM</td><td class="ti3">☕</td><td class="td2">Early breakfast at camp. Hard Rain Café opens at 10am — eat at camp before departing.</td></tr>
+<tr><td class="ti2">8:25 AM</td><td class="ti3">🌿</td><td class="td2"><a href="https://www.google.com/maps/search/?api=1&query=Hoh+Rainforest+Visitor+Center%2C+18113+Upper+Hoh+Rd%2C+Forks%2C+WA+98331">📍 Hoh Rainforest Visitor Center</a> (~19 mi, ~25 min). Arrive before 9am to beat the parking crunch.</td></tr>
+<tr><td class="ti2">8:30 AM</td><td class="ti3">🌳</td><td class="td2"><a href="https://www.google.com/maps/search/?api=1&query=Hall+of+Mosses+Trail%2C+Hoh+Rain+Forest%2C+Olympic+National+Park%2C+WA">📍 Hall of Mosses Trail</a> — 0.8-mile loop. The iconic moss-draped maple cathedral. ~45 min.</td></tr>
+<tr><td class="ti2">9:30 AM</td><td class="ti3">🥾</td><td class="td2">Hoh River Trail — head up valley. First 2–3 miles are flat and extraordinary. Turn around by noon if doing 3 miles each way.</td></tr>
+<tr><td class="ti2">12:00 PM</td><td class="ti3">🧺</td><td class="td2">Picnic lunch at the visitor center or by the Hoh River.</td></tr>
+<tr><td class="ti2">1:30 PM</td><td class="ti3">🌊</td><td class="td2">Explore further or sit by the river — both are correct.</td></tr>
+<tr><td class="ti2">3:00 PM</td><td class="ti3">🚐</td><td class="td2">Depart Hoh, back to Hard Rain Café.</td></tr>
+<tr><td class="ti2">3:30 PM</td><td class="ti3">🏕️</td><td class="td2">Arrive camp. No meetings today — full evening free.</td></tr>
+<tr><td class="ti2">6:00 PM</td><td class="ti3">🍽️</td><td class="td2">Cook at camp or café.</td></tr>
+<tr class="nr"><td colspan="3">No meeting today. Full day available.</td></tr>
+</table>
+<div class="mpr">
+<a class="mb" href="https://www.google.com/maps/search/?api=1&query=Hoh+Rainforest+Visitor+Center%2C+18113+Upper+Hoh+Rd%2C+Forks%2C+WA+98331">🗺️ Hoh Visitor Center</a>
+<a class="mb s" href="https://www.google.com/maps/search/?api=1&query=Hall+of+Mosses+Trail%2C+Hoh+Rain+Forest%2C+Olympic+National+Park%2C+WA">🗺️ Hall of Mosses</a>
+</div>
+</div>
+</div>
+
+<!-- DAY 11 -->
+<div class="day" id="d10">
+<div class="dh" onclick="tog('d10')">
+<div class="dd"><div class="dl">Day 11</div><div class="dn">Jul 16</div><div class="dw">Thursday</div></div>
+<div class="dt"><div class="dti"><div class="dtx">Hard Rain Café → Ainsworth State Park → Multnomah Falls → Vista House</div><div class="tags"><span class="tag td">Drive</span><span class="tag tm">⚠️ Meeting</span><span class="tag ts">Sightseeing</span><span class="tag tc2">Overnight</span></div></div><div class="cv">▼</div></div>
+</div>
+<div class="db">
+<table class="tbl">
+<tr><td class="ti2">9:00 AM</td><td class="ti3">🚐</td><td class="td2">Depart Hard Rain Café. North on Upper Hoh Rd to US-101. South through Aberdeen/Hoquiam.</td></tr>
+<tr><td class="ti2">11:30 AM</td><td class="ti3">⛽</td><td class="td2">Olympia — fuel if needed.</td></tr>
+<tr><td class="ti2">12:00 PM</td><td class="ti3">🚐</td><td class="td2">I-5 South through Longview/Kelso. Cross into Oregon. I-84 East.</td></tr>
+<tr><td class="ti2">2:00 PM</td><td class="ti3">🏕️</td><td class="td2"><a href="https://www.google.com/maps/search/?api=1&query=Ainsworth+State+Park%2C+Cascade+Locks%2C+OR+97014">📍 Arrive Ainsworth State Park</a> — <strong>unhook trailers FIRST.</strong> Check-in is 4pm; call ahead for early entry. Everything this afternoon is without trailers.</td></tr>
+<tr><td class="ti2">2:45 PM</td><td class="ti3">💧</td><td class="td2"><a href="https://www.google.com/maps/search/?api=1&query=Multnomah+Falls%2C+Oregon+97014">📍 Multnomah Falls</a> (2 mi west, tow vehicles only). Bridge overlook (easy 0.4 mi) or hike to top (2.4 mi, 600 ft). 620-foot falls. 🚨 No trailers at Multnomah in summer.</td></tr>
+<tr><td class="ti2">3:30 PM</td><td class="ti3">📡</td><td class="td2">Back at camp. Starlink up.</td></tr>
+<tr class="mr"><td class="ti2">4:00 PM</td><td class="ti3">💻</td><td class="td2">🔴 Thursday meeting (4:00–5:05 PM Pacific) — at camp.</td></tr>
+<tr><td class="ti2">5:15 PM</td><td class="ti3">🏛️</td><td class="td2"><a href="https://www.google.com/maps/search/?api=1&query=Vista+House%2C+40700+Historic+Columbia+River+Hwy%2C+Corbett%2C+OR+97019">📍 Vista House / Crown Point</a> — tow vehicles on Historic Hwy 30. Panoramic 733-ft Gorge overlook. 🚨 No trailers on Historic Hwy 30.</td></tr>
+<tr class="or"><td class="ti2">5:45 PM</td><td class="ti3">💧</td><td class="td2"><a href="https://www.google.com/maps/search/?api=1&query=Latourell+Falls%2C+OR">📍 Latourell Falls</a> or Bridal Veil Falls if time allows — both minutes off Historic Hwy 30.</td></tr>
+<tr><td class="ti2">7:00 PM</td><td class="ti3">🍽️</td><td class="td2">Back at camp for dinner.</td></tr>
+<tr class="nr"><td colspan="3">1-night stay. Check-in 4pm. Earplugs recommended (train noise). ⚠️ Vista House interior closed Wed/Thu but exterior overlook always open.</td></tr>
+</table>
+<div class="mpr">
+<a class="mb" href="https://www.google.com/maps/dir/Hard+Rain+Cafe%2C+Forks%2C+WA/Ainsworth+State+Park%2C+Cascade+Locks%2C+OR/Multnomah+Falls%2C+OR/Vista+House%2C+Corbett%2C+OR">🗺️ Full Day Route</a>
+</div>
+</div>
+</div>
+
+<!-- DAY 12 -->
+<div class="day" id="d11">
+<div class="dh" onclick="tog('d11')">
+<div class="dd"><div class="dl">Day 12</div><div class="dn">Jul 17</div><div class="dw">Friday</div></div>
+<div class="dt"><div class="dti"><div class="dtx">Ainsworth State Park → Hood River → Boise, ID</div><div class="tags"><span class="tag td">Drive</span><span class="tag tc2">Overnight</span></div></div><div class="cv">▼</div></div>
+</div>
+<div class="db">
+<table class="tbl">
+<tr><td class="ti2">9:00 AM</td><td class="ti3">🚐</td><td class="td2">Depart Ainsworth. I-84 East.</td></tr>
+<tr class="or"><td class="ti2">9:30 AM</td><td class="ti3">☕</td><td class="td2"><a href="https://www.google.com/maps/search/?api=1&query=Hood+River%2C+OR+97031">📍 Hood River</a> — optional 20-min coffee/fuel stop. Charming gorge town.</td></tr>
+<tr><td class="ti2">11:30 AM</td><td class="ti3">⛽</td><td class="td2">The Dalles — fuel.</td></tr>
+<tr><td class="ti2">12:30 PM</td><td class="ti3">🍔</td><td class="td2">Pendleton, OR — lunch.</td></tr>
+<tr><td class="ti2">2:30 PM</td><td class="ti3">🏕️</td><td class="td2"><a href="https://www.google.com/maps/search/?api=1&query=Hi+Valley+RV+Park%2C+10555+N+Horseshoe+Bend+Rd%2C+Garden+City%2C+ID+83714">📍 Arrive Hi Valley RV Park, Boise</a> — set up. No meeting today.</td></tr>
+<tr><td class="ti2">6:00 PM</td><td class="ti3">🍽️</td><td class="td2"><a href="https://www.google.com/maps/search/?api=1&query=Basque+Block%2C+Boise%2C+ID+83702">📍 Basque Block, downtown Boise</a> — unique cultural district, excellent restaurants.</td></tr>
+<tr class="nr"><td colspan="3">1-night stay. No meetings. Great food and culture scene in Boise.</td></tr>
+</table>
+<div class="mpr">
+<a class="mb" href="https://www.google.com/maps/dir/Ainsworth+State+Park%2C+Cascade+Locks%2C+OR/Hood+River%2C+OR/Boise%2C+ID">🗺️ Full Day Route</a>
+</div>
+</div>
+</div>
+
+<!-- DAY 13 -->
+<div class="day" id="d12">
+<div class="dh" onclick="tog('d12')">
+<div class="dd"><div class="dl">Day 13</div><div class="dn">Jul 18</div><div class="dw">Saturday</div></div>
+<div class="dt"><div class="dti"><div class="dtx">Boise, ID → Shoshone Falls → Home, Mapleton, UT</div><div class="tags"><span class="tag td">Drive</span><span class="tag ts">Sightseeing</span></div></div><div class="cv">▼</div></div>
+</div>
+<div class="db">
+<table class="tbl">
+<tr><td class="ti2">9:00 AM</td><td class="ti3">🚐</td><td class="td2">Depart Boise. I-84 East to I-15 South.</td></tr>
+<tr><td class="ti2">10:30 AM</td><td class="ti3">💧</td><td class="td2"><a href="https://www.google.com/maps/search/?api=1&query=Shoshone+Falls+Park%2C+4155+Shoshone+Falls+Grade+Rd%2C+Twin+Falls%2C+ID+83301">📍 Shoshone Falls, Twin Falls</a> — 5 min off I-84. Trailers fine in main lot. Taller than Niagara. Perfect final scenic note. ~30 min.</td></tr>
+<tr><td class="ti2">12:30 PM</td><td class="ti3">🍔</td><td class="td2">Pocatello — lunch.</td></tr>
+<tr><td class="ti2">2:30 PM</td><td class="ti3">🏠</td><td class="td2">🏠 <strong>Home in Mapleton!</strong> Trip complete.</td></tr>
+</table>
+<div class="mpr">
+<a class="mb" href="https://www.google.com/maps/dir/Hi+Valley+RV+Park%2C+Garden+City%2C+ID/Shoshone+Falls+Park%2C+Twin+Falls%2C+ID/Mapleton%2C+UT">🗺️ Full Day Route Home</a>
+</div>
+</div>
+</div>
+
+</div><!-- end wrap -->
+
+<script>
+function tog(id){document.getElementById(id).classList.toggle('open');}
+if('serviceWorker' in navigator){
+  window.addEventListener('load',()=>{
+    navigator.serviceWorker.register('./sw.js').catch(()=>{});
+  });
+}
+</script>
+</body>
+</html>
